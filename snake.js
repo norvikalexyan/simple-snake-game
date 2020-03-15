@@ -1,3 +1,4 @@
+//*** Creating the snake: *** 
 const GameBoard = document.getElementById("GameBoard"); //we introducing our canvas to js.
 const context = GameBoard.getContext("2d"); //we need a context object for rendering drawings in our canvas.
 //we create our snake by defining an array of objects that each one are coordination of one part of the snake.
@@ -23,7 +24,7 @@ function showSnake() {
 }
 showSnake(); //we call our showSnake() function.
 
-//The Snake moves:
+//*** The Snake moves: ***
 //first lets define the snake head and add 10 to head x coordinate so new head is one step further than old head and then add new head to the snake 
 //we gonna use array in js method for array called unshift().
 //we wrap the whole thing in a function and called goSnake()
@@ -40,12 +41,20 @@ function clearBoard() {
     context.fillStyle = "white";
     context.fillRect(0, 0, GameBoard.width, GameBoard.height);
 } 
-clearBoard();
-goSnake();
-goSnake();
-goSnake();
-goSnake();
-goSnake();
-goSnake();
-goSnake();
-showSnake();
+
+//*** Animate the moment: *** 
+//now we need to make the code in a way that it shows each step automatically wait some time and then show next step.
+//there is one function in js that is responsible for waiting called setTimeout(a, b) which a is the function we want to run are some time and b is amount of waiting time in milliseconds.
+//now we will wrap setTimeout() in one function lets call it startMoving and then at the end of function we call it again.
+//lets remove our first showSnake() because we don't need it anymore and call goSnake() one time,also lets run our function after declaring it.
+function startMoving() {
+    setTimeout(() => {
+        clearBoard();
+        goSnake();
+        showSnake();
+        startMoving();
+    }, 200);
+} 
+startMoving();
+
+
