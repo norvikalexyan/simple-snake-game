@@ -22,3 +22,30 @@ function showSnake() {
     snake.forEach(Element => drawSquare(Element.x, Element.y, 'lightblue', 'black'));
 }
 showSnake(); //we call our showSnake() function.
+
+//The Snake moves:
+//first lets define the snake head and add 10 to head x coordinate so new head is one step further than old head and then add new head to the snake 
+//we gonna use array in js method for array called unshift().
+//we wrap the whole thing in a function and called goSnake()
+//lets call goSnake() function 7 times to see snake is 7 steps further but don't forget that we must call showSnake() to show the moved snake.
+function goSnake() {
+    const head = {x: snake[0].x + 10, y: snake[0].y};
+    snake.unshift(head);
+    //we cut the tail using Js method for array called pop().
+    snake.pop();
+}
+//there is one problem ,now you see two snakes. one is the snake in one position and second is our snake after move so we clear our game board before showing snake again.
+//that can be done by a drawing a big white square on the game board so we wrap it in ome function and call that  clearBoard.
+function clearBoard() {
+    context.fillStyle = "white";
+    context.fillRect(0, 0, GameBoard.width, GameBoard.height);
+} 
+clearBoard();
+goSnake();
+goSnake();
+goSnake();
+goSnake();
+goSnake();
+goSnake();
+goSnake();
+showSnake();
