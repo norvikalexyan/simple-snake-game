@@ -40,42 +40,23 @@ function goSnake() {
     snake.unshift(head);
     //we cut the tail using Js method for array called pop().
     snake.pop();
-}
+};
 //there is one problem ,now you see two snakes. one is the snake in one position and second is our snake after move so we clear our game board before showing snake again.
 //that can be done by a drawing a big white square on the game board so we wrap it in ome function and call that  clearBoard.
 function clearBoard() {
     context.fillStyle = "white";
     context.fillRect(0, 0, GameBoard.width, GameBoard.height);
-} 
-
-//*** Animate the moment: *** 
-//now we need to make the code in a way that it shows each step automatically wait some time and then show next step.
-//there is one function in js that is responsible for waiting called setTimeout(a, b) which a is the function we want to run are some time and b is amount of waiting time in milliseconds.
-//now we will wrap setTimeout() in one function lets call it startMoving and then at the end of function we call it again.
-//lets remove our first showSnake() because we don't need it anymore and call goSnake() one time,also lets run our function after declaring it.
-//and now we need to put our addEventListener() in a function that runs at the beginning of game, So lets put it at the beginning of startMoving()
-function startMoving() {
-    document.addEventListener("keydown", changeDirection);
-    setTimeout(() => {
-        clearBoard();
-        goSnake(stepX,stepY); //the snake will move towards bottom of the game board, if we put -10 it will go up.
-        showSnake();
-        startMoving();
-    }, 200);
-} 
-startMoving();
-
-//*** Getting keyboard inputs *** 
-//to be able to move our snake's movement with keyboard first we need to capture the event of pressing the keyboard key in our code,this can be done by attaching something called 'event listener' to our page.
-//every time  a key is pressed a function is called that has an event input,we can use this event input to get find which key was pressed.
-//each key on the keyboard has a uniq value called keycode.
-
-
+};
 //*** using input to change direction *** 
 //First lets create a function called changeDirection(), 
 //this function has one input of the event type that we are going to use in our addEventListener() function.
 //it should not be allowed to go left when it is going right or vice versa, same about up and down, 
 //let's fix that by adding a variable that keeps the direction of the snake and then check it when we want to change direction.
+
+//*** Getting keyboard inputs *** 
+//to be able to move our snake's movement with keyboard first we need to capture the event of pressing the keyboard key in our code,this can be done by attaching something called 'event listener' to our page.
+//every time  a key is pressed a function is called that has an event input,we can use this event input to get find which key was pressed.
+//each key on the keyboard has a uniq value called keycode.
 let direction = "right";
 function changeDirection(event) {
 	const pressedKey = event.keyCode;
@@ -119,5 +100,48 @@ function changeDirection(event) {
 //Snake is dead if on of the following cases happens:
 //1.Snake's head hits the wall.
 //2.Snake's head goes on any part of its body (snake eats itself)
+function isSnakeAlive(){
+    if(
+        snake[0].x < 0 ||   // head hits the left wall
+        snake[0].x > GameBoard.width - 10 ||   // head hits the right wall
+        snake[0].y < 0 ||   // head hits the top wall
+        snake[0].y > GameBoard.height - 10   // head hits the bottom wall
+    ) {
+        return false;
+    }
+    for (let i = 4; i < snake.length; i++) {
+        if (snake[i].x === snake[0].x && snake[i].y === snake[0].y){
+            return false;
+        }
+    }
+    return true;
+}
+
+
+//*** Animate the moment: *** 
+//now we need to make the code in a way that it shows each step automatically wait some time and then show next step.
+//there is one function in js that is responsible for waiting called setTimeout(a, b) which a is the function we want to run are some time and b is amount of waiting time in milliseconds.
+//now we will wrap setTimeout() in one function lets call it startMoving and then at the end of function we call it again.
+//lets remove our first showSnake() because we don't need it anymore and call goSnake() one time,also lets run our function after declaring it.
+//and now we need to put our addEventListener() in a function that runs at the beginning of game, So lets put it at the beginning of startMoving()
+function startMoving(){
+    document.addEventListener("keydown", changeDirection);
+    setTimeout(()=>{
+        clearBoard();
+        if(isSnakeAlive()){
+            goSnake();
+        } else {
+            showSnake();
+            return false;
+        }
+        showSnake();
+        startMoving();
+    }, 200);
+};
+
+startMoving();
+
+
+
 
 
