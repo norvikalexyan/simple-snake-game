@@ -53,7 +53,9 @@ function clearBoard() {
 //there is one function in js that is responsible for waiting called setTimeout(a, b) which a is the function we want to run are some time and b is amount of waiting time in milliseconds.
 //now we will wrap setTimeout() in one function lets call it startMoving and then at the end of function we call it again.
 //lets remove our first showSnake() because we don't need it anymore and call goSnake() one time,also lets run our function after declaring it.
+//and now we need to put our addEventListener() in a function that runs at the beginning of game, So lets put it at the beginning of startMoving()
 function startMoving() {
+    document.addEventListener("keydown", changeDirection);
     setTimeout(() => {
         clearBoard();
         goSnake(stepX,stepY); //the snake will move towards bottom of the game board, if we put -10 it will go up.
@@ -67,10 +69,55 @@ startMoving();
 //to be able to move our snake's movement with keyboard first we need to capture the event of pressing the keyboard key in our code,this can be done by attaching something called 'event listener' to our page.
 //every time  a key is pressed a function is called that has an event input,we can use this event input to get find which key was pressed.
 //each key on the keyboard has a uniq value called keycode.
-document.addEventListener("keydown",function(event){
-    const LeftKey = 37;  
-    const RightKey = 39;  
-    const UpKey = 38;  
-    const DownKey = 40;
-});
+
+
+//*** using input to change direction *** 
+//First lets create a function called changeDirection(), 
+//this function has one input of the event type that we are going to use in our addEventListener() function.
+//it should not be allowed to go left when it is going right or vice versa, same about up and down, 
+//let's fix that by adding a variable that keeps the direction of the snake and then check it when we want to change direction.
+let direction = "right";
+function changeDirection(event) {
+	const pressedKey = event.keyCode;
+	const LeftKey = 37;  
+	const RightKey = 39;  
+	const UpKey = 38;  
+	const DownKey = 40;
+	switch(pressedKey) {
+		case LeftKey:
+			if(direction !== "right"){
+				stepX = -10;
+		                stepY = 0;
+		                direction = "left"
+			}
+		        break;
+		case RightKey:
+			if(direction !== "left"){
+		        	stepX = 10;
+				stepY = 0;
+		            	direction = "right"	
+			}
+		        break;
+		case UpKey:
+			if(direction !== "down"){
+				stepX = 0;
+				stepY = -10;
+				direction = "up"
+			}
+			break;
+		case DownKey:
+			if(direction !== "up"){
+				stepX = 0;
+				stepY = 10;
+				direction = "down"
+			}
+			break;
+	} 
+}
+
+//*** Lets kill the snake: ***
+//Snake is dead if on of the following cases happens:
+//1.Snake's head hits the wall.
+//2.Snake's head goes on any part of its body (snake eats itself)
+
 
