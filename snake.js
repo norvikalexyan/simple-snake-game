@@ -1,6 +1,11 @@
 //*** Creating the snake: *** 
+//we create two global variables that keeps the value of xChange and yChange.
+//So in the event of key press we can change the value of them and then feed them to our goSnake function. I will add them at the beginning of the script
+let stepX=10;
+let stepY=0;
 const GameBoard = document.getElementById("GameBoard"); //we introducing our canvas to js.
 const context = GameBoard.getContext("2d"); //we need a context object for rendering drawings in our canvas.
+
 //we create our snake by defining an array of objects that each one are coordination of one part of the snake.
 //snake is our array name and we have 5 objects in snake array.
 let snake = [
@@ -29,8 +34,9 @@ showSnake(); //we call our showSnake() function.
 //we gonna use array in js method for array called unshift().
 //we wrap the whole thing in a function and called goSnake()
 //lets call goSnake() function 7 times to see snake is 7 steps further but don't forget that we must call showSnake() to show the moved snake.
+//we create a snake that moves in x dimension so now we have to do the same to y dimension so we will have two inputs and use that inputs in our goSnake() function.
 function goSnake() {
-    const head = {x: snake[0].x + 10, y: snake[0].y};
+    const head = {x: snake[0].x + stepX, y: snake[0].y + stepY};
     snake.unshift(head);
     //we cut the tail using Js method for array called pop().
     snake.pop();
@@ -50,11 +56,21 @@ function clearBoard() {
 function startMoving() {
     setTimeout(() => {
         clearBoard();
-        goSnake();
+        goSnake(stepX,stepY); //the snake will move towards bottom of the game board, if we put -10 it will go up.
         showSnake();
         startMoving();
     }, 200);
 } 
 startMoving();
 
+//*** Getting keyboard inputs *** 
+//to be able to move our snake's movement with keyboard first we need to capture the event of pressing the keyboard key in our code,this can be done by attaching something called 'event listener' to our page.
+//every time  a key is pressed a function is called that has an event input,we can use this event input to get find which key was pressed.
+//each key on the keyboard has a uniq value called keycode.
+document.addEventListener("keydown",function(event){
+    const LeftKey = 37;  
+    const RightKey = 39;  
+    const UpKey = 38;  
+    const DownKey = 40;
+});
 
